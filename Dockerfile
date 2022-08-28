@@ -4,7 +4,7 @@ RUN docker-php-ext-install mysqli
 
 COPY index.php /var/www/html/index.php
 
-ENV serverName=database-container
+ENV serverName=jenkins-demo-db
 ENV userName=root
 ENV password=Test123
 ENV dbName=Test
