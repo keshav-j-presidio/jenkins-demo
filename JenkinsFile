@@ -40,7 +40,7 @@ pipeline {
                         sh "docker rm ${websiteRepo}"
                     } catch (Exception e) {
                     }
-                    sh "docker run -d -p 8080:80 --name ${websiteRepo} -it ${websiteImageName}"
+                    sh "docker run -d -p 80:80 --name ${websiteRepo} -it ${websiteImageName}"
                 }
             }
         }
