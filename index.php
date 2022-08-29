@@ -3,7 +3,7 @@
 echo "Hello world";
 echo "<br>";
 
-$serverName = $_ENV['serverName'];
+$serverName = '192.168.0.31';
 $username = $_ENV['userName'];
 $password = $_ENV['password'];
 $dbName = $_ENV['dbName'];
