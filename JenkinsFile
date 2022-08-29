@@ -1,0 +1,61 @@
+ecrUri = "877969058937.dkr.ecr.us-east-1.amazonaws.com"
+githubAccount = 'https://github.com/keshav-j-presidio'
+websiteRepo = 'jenkins-demo'
+databaseRepo = 'jenkins-demo-db'
+websiteImageName = "${ecrUri}/${websiteRepo}:latest"
+databaseImageName = "${ecrUri}/${databaseRepo}:latest"
+
+pipeline {
+  agent any
+
+    stages {
+        stage('Build Website') {
+            steps {
+                script {
+                    sh "rm -r ${websiteRepo}"
+                    sh "git clone ${githubAccount}/${websiteRepo}.git"
+                    docker.build(websiteImageName, websiteRepo)
+                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
+                    docker.image(websiteImageName).push()
+                }
+            }
+        }
+        stage('Build Database') {
+            steps {
+                script {
+                    sh "rm -r ${databaseRepo}"
+                    sh "git clone ${githubAccount}/${databaseRepo}.git"
+                    docker.build(databaseImageName, databaseRepo)
+                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
+                    docker.image(databaseImageName).push()
+                }
+            }
+        }
+        stage('Deploy Website') {
+            steps {
+                script {
+                    echo 'Deploying Docker Container..'
+                    try {
+                        sh "docker stop ${websiteRepo}"
+                        sh "docker rm ${websiteRepo}"
+                    } catch (Exception e) {
+                    }
+                    sh "docker run -d -p 80:80 --name ${websiteRepo} -it ${websiteImageName}"
+                }
+            }
+        }
+        stage('Deploy Database') {
+            steps {
+                script {
+                    echo 'Deploying Docker Container..'
+                    try {
+                        sh "docker stop ${databaseRepo}"
+                        sh "docker rm ${databaseRepo}"
+                    } catch (Exception e) {
+                    }
+                    sh "docker run -d -p 3306:3306 --name ${databaseRepo} -it ${databaseImageName}"
+                }
+            }
+        }
+    }
+}
