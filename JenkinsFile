@@ -15,8 +15,8 @@ pipeline {
                     sh "rm -rf ${websiteRepo}"
                     sh "git clone ${githubAccount}/${websiteRepo}.git"
                     docker.build(websiteImageName, websiteRepo)
-                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
-                    docker.image(websiteImageName).push()
+                    // sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
+                    // docker.image(websiteImageName).push()
                 }
             }
         }
@@ -26,8 +26,8 @@ pipeline {
                     sh "rm -rf ${databaseRepo}"
                     sh "git clone ${githubAccount}/${databaseRepo}.git"
                     docker.build(databaseImageName, databaseRepo)
-                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
-                    docker.image(databaseImageName).push()
+                    // sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
+                    // docker.image(databaseImageName).push()
                 }
             }
         }
