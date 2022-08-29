@@ -12,7 +12,7 @@ pipeline {
         stage('Build Website') {
             steps {
                 script {
-                    sh "rm -r ${websiteRepo}"
+                    sh "rm -rf ${websiteRepo}"
                     sh "git clone ${githubAccount}/${websiteRepo}.git"
                     docker.build(websiteImageName, websiteRepo)
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
@@ -23,7 +23,7 @@ pipeline {
         stage('Build Database') {
             steps {
                 script {
-                    sh "rm -r ${databaseRepo}"
+                    sh "rm -rf ${databaseRepo}"
                     sh "git clone ${githubAccount}/${databaseRepo}.git"
                     docker.build(databaseImageName, databaseRepo)
                     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}"
