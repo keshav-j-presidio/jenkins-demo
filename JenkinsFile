@@ -53,7 +53,7 @@ pipeline {
                         sh "docker rm ${databaseRepo}"
                     } catch (Exception e) {
                     }
-                    sh "docker run -d -p 3306:3306 --name ${databaseRepo} -it ${databaseImageName}"
+                    sh "docker run -d -p 3306:56363 --name ${databaseRepo} -it ${databaseImageName}"
                 }
             }
         }
